@@ -5,15 +5,38 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.BeanNotOfRequiredTypeException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CantanteService {
 
     @Autowired
     private CantanteRepository cantanteRepository;
+
+    public Optional<Cantante> findByIdOptional(Long id) {
+        Optional<Cantante> cantante = cantanteRepository.findById(id);
+
+        if (!cantante.isPresent()){
+            throw new EntityNotFoundException("Cannot find cantante with id: " + id);
+        }
+        return cantante;
+    }
+
+//    public Cantante findByIdOptional(Long id) {
+//        Optional<Cantante> cantante = cantanteRepository.findById(id);
+//
+//        if (!cantante.isPresent()){
+//            throw new EntityNotFoundException("Cannot find cantante with id: " + id);
+//        }
+//        return cantante.get();
+//
+//    funziona uguale al metodo sopra
+//    }
 
     public CantanteResponse findById(Long id) {
         Cantante cantante = cantanteRepository
@@ -45,6 +68,11 @@ public class CantanteService {
                 .toList();
         //questa è la semplificazione delle  righe sopra sfruttando il metodo sotto
 
+    }
+
+    public Page<Cantante> findAllComplete(Pageable pageable) {
+        return cantanteRepository
+                .findAll(pageable);
     }
 
     public CantanteResponse update(Long id, CantanteRequest request) {

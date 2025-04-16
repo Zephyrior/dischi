@@ -25,7 +25,7 @@ public class CommonRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         if (cantanteRepository.count() == 0) {
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 100; i++) {
                 Cantante cantante = new Cantante();
                 cantante.setNome(faker.name().firstName());
                 cantante.setCognome(faker.name().lastName());
